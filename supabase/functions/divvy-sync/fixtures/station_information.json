@@ -1,0 +1,400 @@
+{
+ "last_updated": 1793481841,
+ "ttl": 60,
+ "version": "2.3",
+ "data": {
+  "stations": [
+   {
+    "station_id": "a3ac9d43-a135-11e9-9cda-0a87ae2ba916",
+    "name": "Western Ave & Walton St",
+    "short_name": "CHI00576",
+    "lon": -87.6865960164,
+    "lat": 41.89841768945,
+    "capacity": 23,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "a3af8123-a135-11e9-9cda-0a87ae2ba916",
+    "name": "Christiana Ave & Lawrence Ave",
+    "short_name": "CHI00302",
+    "lon": -87.7118306675,
+    "lat": 41.96835449363,
+    "capacity": 15,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "2129148164045400658",
+    "name": "Dearborn St & Division St",
+    "short_name": "CHI02125",
+    "lon": -87.62991,
+    "lat": 41.9043,
+    "capacity": 15,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "a3b47cbc-a135-11e9-9cda-0a87ae2ba916",
+    "name": "Damen Ave & Lake St",
+    "short_name": "CHI00619",
+    "lon": -87.6768354,
+    "lat": 41.8849659,
+    "capacity": 16,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "2265362184138796866",
+    "name": "Inner Lakeshore Dr & Waveland Ave",
+    "short_name": "CHI02418",
+    "lon": -87.64477,
+    "lat": 41.95031,
+    "capacity": 15,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "2116941558607507816",
+    "name": "Peoria St & Kinzie St",
+    "short_name": "CHI02098",
+    "lon": -87.64973,
+    "lat": 41.88896,
+    "capacity": 19,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "a3aabad8-a135-11e9-9cda-0a87ae2ba916",
+    "name": "Sheffield Ave & Webster Ave",
+    "short_name": "CHI00507",
+    "lon": -87.653818,
+    "lat": 41.92154,
+    "capacity": 19,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "a3a97a01-a135-11e9-9cda-0a87ae2ba916",
+    "name": "Cottage Grove Ave & Oakwood Blvd",
+    "short_name": "CHI00400",
+    "lon": -87.6071,
+    "lat": 41.822985,
+    "capacity": 15,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "a3b48c07-a135-11e9-9cda-0a87ae2ba916",
+    "name": "Leavitt St & Chicago Ave",
+    "short_name": "CHI00713",
+    "lon": -87.682017,
+    "lat": 41.895501,
+    "capacity": 19,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "a3a80512-a135-11e9-9cda-0a87ae2ba916",
+    "name": "Damen Ave & Cortland St",
+    "short_name": "CHI00388",
+    "lon": -87.677335,
+    "lat": 41.915983,
+    "capacity": 19,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "1970688521031469268",
+    "name": "Martin Luther King Dr & 87th St",
+    "short_name": "CHI01973",
+    "lon": -87.61439,
+    "lat": 41.73677,
+    "capacity": 15,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "2007796988006173238",
+    "name": "Melvina Ave & Giddings Ave",
+    "short_name": "CHI01954",
+    "lon": -87.78202,
+    "lat": 41.96648,
+    "capacity": 8,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "1975902497437067330",
+    "name": "Homan Ave & 26th St",
+    "short_name": "CHI01854",
+    "lon": -87.70983,
+    "lat": 41.84425,
+    "capacity": 15,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "2213358698360523876",
+    "name": "Homan Ave & Fillmore St",
+    "short_name": "CHI02262",
+    "lon": -87.71085,
+    "lat": 41.86811,
+    "capacity": 8,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "2207048336540083862",
+    "name": "Central Park Ave & Ohio St",
+    "short_name": "CHI02247",
+    "lon": -87.71644,
+    "lat": 41.89188,
+    "capacity": 8,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "2209666353179784114",
+    "name": "Central Park Ave & Augusta Blvd",
+    "short_name": "CHI02250",
+    "lon": -87.71649,
+    "lat": 41.89894,
+    "capacity": 8,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "1867616662773391950",
+    "name": "Karlov Ave & Armitage Ave",
+    "short_name": "CHI01825",
+    "lon": -87.728952,
+    "lat": 41.91748,
+    "capacity": 15,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "1929905600854819414",
+    "name": "Lowell Ave & Armitage Ave",
+    "short_name": "CHI02024",
+    "lon": -87.7353543,
+    "lat": 41.9170767,
+    "capacity": 15,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "a3ad7636-a135-11e9-9cda-0a87ae2ba916",
+    "name": "MLK Jr Dr & 56th St",
+    "short_name": "CHI00567",
+    "lon": -87.6158532619,
+    "lat": 41.79342945658,
+    "capacity": 11,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "a3a62fc9-a135-11e9-9cda-0a87ae2ba916",
+    "name": "Indiana Ave & 26th St",
+    "short_name": "CHI00237",
+    "lon": -87.622481,
+    "lat": 41.845687,
+    "capacity": 15,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "2246215988797035830",
+    "name": "Bent Park",
+    "short_name": "CHI02390",
+    "lon": -87.724011,
+    "lat": 42.064494,
+    "region_id": "35",
+    "capacity": 6,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "2197048925058850020",
+    "name": "Woodlawn Ave & 103rd St",
+    "short_name": "CHI02221",
+    "lon": -87.59404,
+    "lat": 41.70738,
+    "capacity": 4,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "1969236968943731106",
+    "name": "Menard Ave & Lawrence Ave",
+    "short_name": "CHI01910",
+    "lon": -87.77274,
+    "lat": 41.96788,
+    "capacity": 8,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "2142960538272023440",
+    "name": "Marshfield Ave & Wabansia Ave",
+    "short_name": "CHI02160",
+    "lon": -87.66888,
+    "lat": 41.91218,
+    "capacity": 15,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "2020809814916515864",
+    "name": "Menard Ave & Milwaukee Ave",
+    "short_name": "CHI02003",
+    "lon": -87.77331,
+    "lat": 41.98139,
+    "capacity": 8,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "2186824022205777866",
+    "name": "Wentworth Ave & 111th St",
+    "short_name": "CHI02210",
+    "lon": -87.62825,
+    "lat": 41.69259,
+    "capacity": 8,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "2144730165297252480",
+    "name": "Western Ave & 81st St",
+    "short_name": "CHI02161",
+    "lon": -87.683123,
+    "lat": 41.746426,
+    "capacity": 15,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "6fd280b0-74de-4a89-947d-3be40afa079c",
+    "name": "Altgeld Gardens",
+    "short_name": "CHI00849",
+    "lon": -87.59880065917969,
+    "lat": 41.656665529673724,
+    "capacity": 15,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "1871991855517771832",
+    "name": "Western Ave & 79th St",
+    "short_name": "CHI01803",
+    "lon": -87.682701,
+    "lat": 41.750843,
+    "capacity": 15,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   },
+   {
+    "station_id": "a3b0fae6-a135-11e9-9cda-0a87ae2ba916",
+    "name": "Glenwood Ave & Touhy Ave",
+    "short_name": "CHI01143",
+    "lon": -87.666058,
+    "lat": 42.012701,
+    "capacity": 15,
+    "rental_uris": {
+     "android": "https://chi.lft.to/lastmile_qr_scan",
+     "ios": "https://chi.lft.to/lastmile_qr_scan"
+    },
+    "is_charging": false
+   }
+  ]
+ }
+}
