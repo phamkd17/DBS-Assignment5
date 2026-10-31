@@ -48,7 +48,7 @@ export function computeHealth(opts: {
     return {
       state: "stale",
       headline: "Not updating",
-      detail: `Last successful check ${formatAgo(okAgo ?? Infinity)}. Numbers may be out of date`,
+      detail: `Last successful check ${formatAgo(okAgo ?? Infinity)}`,
     };
   }
 

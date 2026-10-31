@@ -49,7 +49,8 @@ export function HealthBanner({ health }: { health: Health }) {
         {down ? "We can't reach Divvy right now." : "These numbers have stopped updating."}
       </p>
       <p className="mt-0.5">
-        {health.detail}. {down ? "We'll keep trying every 10 seconds." : "Check before you walk over."}
+        {health.detail}.{" "}
+        {down ? "We'll keep trying every 10 seconds." : "The numbers may be out of date, so check before you walk over."}
       </p>
     </div>
   );
