@@ -14,6 +14,12 @@
   animation: row-flash 2.5s ease-out;
 }
 
+/* Gray out the basemap (its blue bus-stop icons looked like followed stations),
+   so color on the map always means a Divvy station. */
+.station-map .leaflet-tile-pane {
+  filter: grayscale(1) brightness(1.04) contrast(0.92);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .row-flash { animation: none; }
   .animate-pulse { animation: none; }

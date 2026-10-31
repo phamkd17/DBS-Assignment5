@@ -26,12 +26,11 @@ export default function StationMap(props: {
   useEffect(() => {
     if (!el.current) return;
     const m = L.map(el.current, { preferCanvas: true, zoomControl: true }).setView([center.lat, center.lon], 14);
-    // A quiet light basemap (no bus-stop icons), so the station dots stand out.
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-      maxZoom: 20,
-      subdomains: "abcd",
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    // Standard OpenStreetMap tiles (no key), drawn in grayscale by .station-map
+    // in globals.css so only our station dots are in color.
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(m);
     map.current = m;
     return () => {
@@ -54,11 +53,12 @@ export default function StationMap(props: {
       const isFollowed = followed.has(s.station_id);
       const isSelected = s.station_id === selectedId;
       L.circleMarker([s.lat, s.lon], {
+        // On the gray map: white dots for every station, blue for ones I follow.
         radius: isSelected ? 9 : isFollowed ? 7 : 5,
-        color: isSelected ? "#0c4a6e" : isFollowed ? "#0369a1" : "#64748b",
-        weight: isSelected ? 3 : 1,
-        fillColor: isFollowed || isSelected ? "#0ea5e9" : "#cbd5e1",
-        fillOpacity: 0.9,
+        color: isSelected ? "#082f49" : isFollowed ? "#075985" : "#334155",
+        weight: isSelected ? 3 : 1.5,
+        fillColor: isFollowed ? "#0284c7" : isSelected ? "#7dd3fc" : "#ffffff",
+        fillOpacity: 1,
       })
         .bindTooltip(s.name)
         .on("click", () => onSelectRef.current(s.station_id))
@@ -69,5 +69,12 @@ export default function StationMap(props: {
     };
   }, [stations, followed, selectedId]);
 
-  return <div ref={el} className="h-80 w-full rounded-lg border border-slate-200 sm:h-96" role="application" aria-label="Map of Divvy stations" />;
+  return (
+    <div
+      ref={el}
+      className="station-map h-80 w-full rounded-lg border border-slate-200 sm:h-96"
+      role="application"
+      aria-label="Map of Divvy stations"
+    />
+  );
 }
