@@ -120,42 +120,55 @@ export function useLiveData(sb: SupabaseClient | null) {
     return () => document.removeEventListener("visibilitychange", onChange);
   }, []);
 
-  // 2. Realtime: changes to the stations I follow, and every new worker run.
-  const followKey = follows?.join(",") ?? null;
+  // 2a. Realtime: every new worker run, which drives the freshness pill. Its own
+  // channel, so following a station doesn't interrupt it.
+  const ready = follows !== null;
   useEffect(() => {
-    if (!sb || followKey === null || !visible) return;
-    const ids = followKey ? followKey.split(",") : [];
+    if (!sb || !ready || !visible) return;
+    const channel = sb
+      .channel(`runs-${crypto.randomUUID()}`)
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "worker_runs" }, (payload) => {
+        const run = payload.new as WorkerRun;
+        setLatestRun(run);
+        if (run.ok) setLastOkRun(run);
+      })
+      .subscribe((status) => {
+        if (status === "SUBSCRIBED") {
+          setConnection("live");
+          loadRuns(sb).catch(() => {}); // catch up on runs missed while away
+        } else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
+          setConnection("reconnecting");
+        }
+      });
+    return () => {
+      sb.removeChannel(channel);
+    };
+  }, [sb, ready, visible, loadRuns]);
 
-    const channel = sb.channel(`live-${crypto.randomUUID()}`);
-    channel.on("postgres_changes", { event: "INSERT", schema: "public", table: "worker_runs" }, (payload) => {
-      const run = payload.new as WorkerRun;
-      setLatestRun(run);
-      if (run.ok) setLastOkRun(run);
-    });
-    // Only subscribe with a filter. Unfiltered would send every station's changes.
-    if (ids.length > 0) {
-      channel.on(
+  // 2b. Realtime: changes to the stations I follow. Re-subscribes when my
+  // follows change, because the filter lists their ids.
+  const followKey = follows?.join(",") ?? "";
+  useEffect(() => {
+    // No follows: no subscription. Unfiltered would send every station's changes.
+    if (!sb || !followKey || !visible) return;
+    const ids = followKey.split(",");
+    const channel = sb
+      .channel(`stations-${crypto.randomUUID()}`)
+      .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "station_status", filter: `station_id=in.(${ids.join(",")})` },
         (payload) => {
           if (payload.eventType !== "DELETE") applyStatus(payload.new as StationStatus);
         },
-      );
-    }
-    channel.subscribe((status) => {
-      if (status === "SUBSCRIBED") {
-        setConnection("live");
+      )
+      .subscribe((status) => {
         // Catch up on anything that changed while we were connecting or away.
-        Promise.all([loadStatuses(sb, ids, true), loadRuns(sb)]).catch(() => {});
-      } else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
-        setConnection("reconnecting");
-      }
-    });
-
+        if (status === "SUBSCRIBED") loadStatuses(sb, ids, true).catch(() => {});
+      });
     return () => {
       sb.removeChannel(channel);
     };
-  }, [sb, followKey, visible, applyStatus, loadStatuses, loadRuns]);
+  }, [sb, followKey, visible, applyStatus, loadStatuses]);
 
   const follow = useCallback(
     async (id: string) => {
