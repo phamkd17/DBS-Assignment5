@@ -4,7 +4,7 @@ Follow the Divvy bike stations you use (by home, class, the lakefront) and watch
 
 Design, Build, Ship (MPCS 51238), Assignment 5: Live Data System.
 
-- **Live app:** _added after the Vercel deploy_
+- **Live app:** https://dbs-assignment5.vercel.app
 - **Data flow chart** (drawn before any code): [docs/data-flow.md](docs/data-flow.md)
 - **Data source notes** (fields, how often they change): [docs/data-source.md](docs/data-source.md)
 
