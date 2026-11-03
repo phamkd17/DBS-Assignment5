@@ -113,7 +113,7 @@ export function StationRow(props: {
                     aria-label={`Add a tag to ${name}`}
                     className="text-sky-700 hover:underline focus-visible:outline-2 focus-visible:outline-sky-600"
                   >
-                    {tags.length ? "+ tag" : "Add tag"}
+                    Add tag
                   </button>
                 </>
               )}
