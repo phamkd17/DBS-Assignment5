@@ -39,3 +39,15 @@ Built for *Design, Build, Ship* (MPCS 51238), Assignment 5: Live Data System. Du
 - `index.ts`: HTTP handler. Fetches the feed, calls `sync_station_status()`, records the run.
 - `parse.ts`: pure functions (feed JSON → rows). No Deno or npm imports, so Node can test it.
 - `parse.test.ts` + `fixtures/`: `npm test` runs it on a saved Divvy response.
+
+## Data model notes
+
+- `follows.tags text[]`: up to 5 personal tags per followed station, 1-24 chars each, checked by `public.valid_tags()` in Postgres and `lib/tags.ts` in the page. The page may update only this column (`grant update (tags)`), only on its own rows (RLS).
+- The page reads `stations` (2,078 rows) in pages of 1,000: PostgREST's row cap.
+- Realtime uses two channels in `lib/use-live-data.ts`: `worker_runs` (stable, drives freshness) and `station_status` filtered to the person's follows (re-subscribed when follows change). Never subscribe to `station_status` unfiltered.
+
+## Tests
+
+- `npm test`: worker on saved fixtures, freshness rules, tag parsing (Node's built-in runner, type stripping).
+- `supabase/tests/*.sql`: real upsert behavior and follows RLS, in rolled-back transactions. Run through the Supabase MCP `execute_sql`.
+- `scripts/realtime-check.mjs <clerk_session_id>`: end-to-end Realtime check as a Clerk test user.
