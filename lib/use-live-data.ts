@@ -5,6 +5,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Station, StationStatus, WorkerRun } from "./types";
 
 export const MAX_FOLLOWS = 25; // matches the follows_limit trigger
+export const MAX_LABEL = 24; // matches the follows.label check constraint
 
 export type Connection = "connecting" | "live" | "reconnecting" | "paused";
 
@@ -31,6 +32,7 @@ async function fetchAllStations(sb: SupabaseClient): Promise<Station[]> {
 export function useLiveData(sb: SupabaseClient | null) {
   const [stations, setStations] = useState<Map<string, Station> | null>(null);
   const [follows, setFollows] = useState<string[] | null>(null);
+  const [labels, setLabels] = useState<Record<string, string>>({}); // my tag per station, e.g. "JCL"
   const [statuses, setStatuses] = useState<Record<string, StationStatus>>({});
   const [latestRun, setLatestRun] = useState<WorkerRun | null>(null);
   const [lastOkRun, setLastOkRun] = useState<WorkerRun | null>(null);
@@ -95,7 +97,7 @@ export function useLiveData(sb: SupabaseClient | null) {
       try {
         const [all, mine] = await Promise.all([
           fetchAllStations(sb),
-          sb.from("follows").select("station_id").order("created_at"),
+          sb.from("follows").select("station_id,label").order("created_at"),
           loadRuns(sb),
         ]);
         if (mine.error) throw mine.error;
@@ -103,6 +105,7 @@ export function useLiveData(sb: SupabaseClient | null) {
         const ids = mine.data.map((f) => f.station_id as string);
         await loadStatuses(sb, ids, false);
         setStations(new Map(all.map((s) => [s.station_id, s])));
+        setLabels(Object.fromEntries(mine.data.filter((f) => f.label).map((f) => [f.station_id, f.label as string])));
         setFollows(ids);
       } catch (e) {
         if (!cancelled) setError(e instanceof Error ? e.message : "Couldn't load stations");
@@ -191,14 +194,44 @@ export function useLiveData(sb: SupabaseClient | null) {
       if (!sb || !follows) return;
       setError(null);
       const before = follows;
+      const labelsBefore = labels;
       setFollows(follows.filter((x) => x !== id));
+      // The tag lives on the follows row, so it goes with it.
+      setLabels((l) => {
+        const next = { ...l };
+        delete next[id];
+        return next;
+      });
       const { error } = await sb.from("follows").delete().eq("station_id", id);
       if (error) {
         setFollows(before);
+        setLabels(labelsBefore);
         setError(`Couldn't remove that station: ${error.message}`);
       }
     },
-    [sb, follows],
+    [sb, follows, labels],
+  );
+
+  // My tag for a followed station. Empty text removes it.
+  const setLabel = useCallback(
+    async (id: string, text: string) => {
+      if (!sb) return;
+      const label = text.trim().slice(0, MAX_LABEL) || null;
+      const before = labels;
+      setError(null);
+      setLabels((l) => {
+        const next = { ...l };
+        if (label) next[id] = label;
+        else delete next[id];
+        return next;
+      });
+      const { error } = await sb.from("follows").update({ label }).eq("station_id", id);
+      if (error) {
+        setLabels(before);
+        setError(`Couldn't save that tag: ${error.message}`);
+      }
+    },
+    [sb, labels],
   );
 
   // For the map: one station's current numbers, fetched once (not live).
@@ -215,6 +248,8 @@ export function useLiveData(sb: SupabaseClient | null) {
     loaded: stations !== null && follows !== null && runsLoaded,
     stations,
     follows: follows ?? [],
+    labels,
+    setLabel,
     statuses,
     latestRun,
     lastOkRun,

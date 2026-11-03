@@ -21,11 +21,12 @@ type Locate =
 export function AddStations(props: {
   stations: Station[];
   followed: Set<string>;
+  labels: Record<string, string>;
   onFollow: (id: string) => void;
   onUnfollow: (id: string) => void;
   peekStatus: (id: string) => Promise<StationStatus | null>;
 }) {
-  const { stations, followed, onFollow, onUnfollow, peekStatus } = props;
+  const { stations, followed, labels, onFollow, onUnfollow, peekStatus } = props;
   const [tab, setTab] = useState<Tab>("search");
   const [query, setQuery] = useState("");
   const [locate, setLocate] = useState<Locate>({ state: "idle" });
@@ -99,7 +100,10 @@ export function AddStations(props: {
       {items.map(({ s, mi }) => (
         <li key={s.station_id} className="flex items-center justify-between gap-3 py-2.5">
           <div className="min-w-0">
-            <p className="truncate font-medium">{s.name}</p>
+            <p className="flex min-w-0 items-center gap-2">
+              {labels[s.station_id] && <Tag text={labels[s.station_id]} />}
+              <span className="truncate font-medium">{s.name}</span>
+            </p>
             <p className="text-xs text-slate-500">
               {mi !== undefined ? `${formatMiles(mi)} away · ` : ""}
               {s.capacity} docks
@@ -204,7 +208,10 @@ export function AddStations(props: {
             {selectedStation ? (
               <div className="flex items-center justify-between gap-3 rounded-lg bg-slate-50 px-3 py-2.5">
                 <div className="min-w-0">
-                  <p className="truncate font-medium">{selectedStation.name}</p>
+                  <p className="flex min-w-0 items-center gap-2">
+                    {labels[selectedStation.station_id] && <Tag text={labels[selectedStation.station_id]} />}
+                    <span className="truncate font-medium">{selectedStation.name}</span>
+                  </p>
                   <p className="text-xs text-slate-500 tabular-nums">
                     {selected?.status === "loading"
                       ? "Loading…"
@@ -223,4 +230,8 @@ export function AddStations(props: {
       </div>
     </section>
   );
+}
+
+function Tag({ text }: { text: string }) {
+  return <span className="shrink-0 rounded bg-sky-100 px-1.5 py-0.5 text-xs font-semibold text-sky-900">{text}</span>;
 }

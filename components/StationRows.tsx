@@ -1,4 +1,7 @@
-import type { Flash } from "@/lib/use-live-data";
+"use client";
+
+import { useState } from "react";
+import { MAX_LABEL, type Flash } from "@/lib/use-live-data";
 import type { Station, StationStatus } from "@/lib/types";
 import { formatAgo, secondsSince } from "@/lib/freshness";
 
@@ -22,21 +25,75 @@ export function StationRow(props: {
   stationId: string;
   status: StationStatus | undefined;
   flash: Flash | undefined;
+  label: string | undefined;
   now: number;
   dim: boolean;
   onRemove: () => void;
+  onSaveLabel: (text: string) => void;
 }) {
-  const { station, stationId, status, flash, now, dim, onRemove } = props;
+  const { station, stationId, status, flash, label, now, dim, onRemove, onSaveLabel } = props;
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState("");
   const name = station?.name ?? stationId;
   const recent = flash && now - flash.at < FLASH_MS ? flash : undefined;
   const classic = status ? status.bikes - status.ebikes : null;
 
+  const startEditing = () => {
+    setDraft(label ?? "");
+    setEditing(true);
+  };
+  const save = () => {
+    setEditing(false);
+    if (draft.trim() !== (label ?? "")) onSaveLabel(draft);
+  };
+
   return (
-    <li className="border-b border-slate-100 last:border-b-0">
-      {/* A new key remounts the row, which restarts the flash animation. */}
-      <div key={flash?.at ?? 0} className={`${GRID} px-4 py-2.5 ${flash ? "row-flash" : ""}`}>
+    <li className="relative border-b border-slate-100 last:border-b-0">
+      {/* A new key remounts only this overlay, which restarts the flash
+          animation without resetting the row (or a tag being edited). */}
+      {flash && <span key={flash.at} aria-hidden className="row-flash pointer-events-none absolute inset-0" />}
+      <div className={`relative ${GRID} px-4 py-2.5`}>
         <div className="min-w-0">
-          <p className="truncate font-medium">{name}</p>
+          {editing ? (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                save();
+              }}
+              className="flex items-center gap-2"
+            >
+              <label htmlFor={`tag-${stationId}`} className="sr-only">
+                Tag for {name}
+              </label>
+              <input
+                id={`tag-${stationId}`}
+                autoFocus
+                value={draft}
+                maxLength={MAX_LABEL}
+                onChange={(e) => setDraft(e.target.value)}
+                onBlur={save}
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") setEditing(false);
+                }}
+                placeholder="e.g. JCL, Ryerson, Volleyball"
+                className="w-full min-w-0 rounded-md border border-sky-400 px-2 py-0.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-200"
+              />
+            </form>
+          ) : (
+            <p className="flex min-w-0 items-center gap-2">
+              {label && (
+                <button
+                  type="button"
+                  onClick={startEditing}
+                  aria-label={`Tag: ${label}. Edit tag`}
+                  className="shrink-0 rounded bg-sky-100 px-1.5 py-0.5 text-xs font-semibold text-sky-900 hover:bg-sky-200 focus-visible:outline-2 focus-visible:outline-sky-600"
+                >
+                  {label}
+                </button>
+              )}
+              <span className="truncate font-medium">{name}</span>
+            </p>
+          )}
           <p className="truncate text-xs text-slate-500">
             {!status ? (
               "No numbers yet"
@@ -44,6 +101,18 @@ export function StationRow(props: {
               <span className="font-medium text-slate-700">Out of service</span>
             ) : (
               `changed ${formatAgo(secondsSince(status.changed_at, now))}`
+            )}
+            {!editing && (
+              <>
+                {" · "}
+                <button
+                  type="button"
+                  onClick={startEditing}
+                  className="text-sky-700 hover:underline focus-visible:outline-2 focus-visible:outline-sky-600"
+                >
+                  {label ? "Edit tag" : "Add tag"}
+                </button>
+              </>
             )}
           </p>
         </div>
