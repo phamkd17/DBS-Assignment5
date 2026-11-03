@@ -21,12 +21,12 @@ type Locate =
 export function AddStations(props: {
   stations: Station[];
   followed: Set<string>;
-  labels: Record<string, string>;
+  tags: Record<string, string[]>;
   onFollow: (id: string) => void;
   onUnfollow: (id: string) => void;
   peekStatus: (id: string) => Promise<StationStatus | null>;
 }) {
-  const { stations, followed, labels, onFollow, onUnfollow, peekStatus } = props;
+  const { stations, followed, tags, onFollow, onUnfollow, peekStatus } = props;
   const [tab, setTab] = useState<Tab>("search");
   const [query, setQuery] = useState("");
   const [locate, setLocate] = useState<Locate>({ state: "idle" });
@@ -101,7 +101,7 @@ export function AddStations(props: {
         <li key={s.station_id} className="flex items-center justify-between gap-3 py-2.5">
           <div className="min-w-0">
             <p className="flex min-w-0 items-center gap-2">
-              {labels[s.station_id] && <Tag text={labels[s.station_id]} />}
+              {tags[s.station_id]?.map((t) => <Tag key={t} text={t} />)}
               <span className="truncate font-medium">{s.name}</span>
             </p>
             <p className="text-xs text-slate-500">
@@ -209,7 +209,7 @@ export function AddStations(props: {
               <div className="flex items-center justify-between gap-3 rounded-lg bg-slate-50 px-3 py-2.5">
                 <div className="min-w-0">
                   <p className="flex min-w-0 items-center gap-2">
-                    {labels[selectedStation.station_id] && <Tag text={labels[selectedStation.station_id]} />}
+                    {tags[selectedStation.station_id]?.map((t) => <Tag key={t} text={t} />)}
                     <span className="truncate font-medium">{selectedStation.name}</span>
                   </p>
                   <p className="text-xs text-slate-500 tabular-nums">

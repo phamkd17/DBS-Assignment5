@@ -76,11 +76,11 @@ export function LiveBoard() {
                     station={live.stations?.get(id)}
                     status={live.statuses[id]}
                     flash={live.flashes[id]}
-                    label={live.labels[id]}
+                    tags={live.tags[id] ?? []}
                     now={now}
                     dim={dim}
                     onRemove={() => live.unfollow(id)}
-                    onSaveLabel={(text) => live.setLabel(id, text)}
+                    onSaveTags={(text) => live.setTags(id, text)}
                   />
                 ))}
               </ul>
@@ -92,7 +92,7 @@ export function LiveBoard() {
           <AddStations
             stations={stationList}
             followed={followed}
-            labels={live.labels}
+            tags={live.tags}
             onFollow={live.follow}
             onUnfollow={live.unfollow}
             peekStatus={live.peekStatus}

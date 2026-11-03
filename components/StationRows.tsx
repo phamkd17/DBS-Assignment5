@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { MAX_LABEL, type Flash } from "@/lib/use-live-data";
+import type { Flash } from "@/lib/use-live-data";
+import { MAX_TAGS, formatTags } from "@/lib/tags";
 import type { Station, StationStatus } from "@/lib/types";
 import { formatAgo, secondsSince } from "@/lib/freshness";
 
@@ -25,13 +26,13 @@ export function StationRow(props: {
   stationId: string;
   status: StationStatus | undefined;
   flash: Flash | undefined;
-  label: string | undefined;
+  tags: string[];
   now: number;
   dim: boolean;
   onRemove: () => void;
-  onSaveLabel: (text: string) => void;
+  onSaveTags: (text: string) => void;
 }) {
-  const { station, stationId, status, flash, label, now, dim, onRemove, onSaveLabel } = props;
+  const { station, stationId, status, flash, tags, now, dim, onRemove, onSaveTags } = props;
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState("");
   const name = station?.name ?? stationId;
@@ -39,12 +40,12 @@ export function StationRow(props: {
   const classic = status ? status.bikes - status.ebikes : null;
 
   const startEditing = () => {
-    setDraft(label ?? "");
+    setDraft(tags.length ? `${formatTags(tags)}, ` : "");
     setEditing(true);
   };
   const save = () => {
     setEditing(false);
-    if (draft.trim() !== (label ?? "")) onSaveLabel(draft);
+    onSaveTags(draft);
   };
 
   return (
@@ -63,38 +64,25 @@ export function StationRow(props: {
               }}
             >
               <label htmlFor={`tag-${stationId}`} className="sr-only">
-                Tag for {name}
+                Tags for {name}, separated by commas
               </label>
               <input
                 id={`tag-${stationId}`}
                 autoFocus
                 value={draft}
-                maxLength={MAX_LABEL}
+                maxLength={MAX_TAGS * 26}
                 onChange={(e) => setDraft(e.target.value)}
                 onBlur={save}
                 onKeyDown={(e) => {
                   if (e.key === "Escape") setEditing(false);
                 }}
-                placeholder="Tag, e.g. JCL · Enter to save"
-                className="mt-0.5 w-full max-w-56 rounded border border-sky-400 px-1.5 py-0.5 text-xs focus:outline-none focus:ring-2 focus:ring-sky-200"
+                placeholder="JCL, Volleyball (commas between tags)"
+                className="mt-0.5 w-full max-w-72 rounded border border-sky-400 px-1.5 py-0.5 text-xs focus:outline-none focus:ring-2 focus:ring-sky-200"
               />
+              <p className="mt-0.5 text-[11px] text-slate-500">Commas between tags · Enter to save · Esc to cancel</p>
             </form>
           ) : (
             <p className="truncate text-xs text-slate-500">
-              {/* My tag, as small text before the freshness; click it to edit. */}
-              {label && (
-                <>
-                  <button
-                    type="button"
-                    onClick={startEditing}
-                    aria-label={`Tag: ${label}. Edit tag`}
-                    className="font-semibold text-sky-800 hover:underline focus-visible:outline-2 focus-visible:outline-sky-600"
-                  >
-                    {label}
-                  </button>
-                  {" · "}
-                </>
-              )}
               {!status ? (
                 "No numbers yet"
               ) : !status.in_service ? (
@@ -102,15 +90,30 @@ export function StationRow(props: {
               ) : (
                 `changed ${formatAgo(secondsSince(status.changed_at, now))}`
               )}
-              {!label && (
+              {/* My tags after the freshness; click one to edit them all. */}
+              {tags.map((t) => (
+                <span key={t}>
+                  {" · "}
+                  <button
+                    type="button"
+                    onClick={startEditing}
+                    aria-label={`Tag: ${t}. Edit tags`}
+                    className="font-semibold text-sky-800 hover:underline focus-visible:outline-2 focus-visible:outline-sky-600"
+                  >
+                    {t}
+                  </button>
+                </span>
+              ))}
+              {tags.length < MAX_TAGS && (
                 <>
                   {" · "}
                   <button
                     type="button"
                     onClick={startEditing}
+                    aria-label={`Add a tag to ${name}`}
                     className="text-sky-700 hover:underline focus-visible:outline-2 focus-visible:outline-sky-600"
                   >
-                    Add tag
+                    {tags.length ? "+ tag" : "Add tag"}
                   </button>
                 </>
               )}

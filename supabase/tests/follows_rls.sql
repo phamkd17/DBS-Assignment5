@@ -6,8 +6,8 @@ begin;
 -- Two people each follow a station, as the worker-free test fixture.
 insert into public.stations (station_id, name, lat, lon, capacity)
 values ('rls-test-a', 'RLS Test A', 41.79, -87.60, 10), ('rls-test-b', 'RLS Test B', 41.79, -87.61, 10);
-insert into public.follows (user_id, station_id, label)
-values ('user_alice', 'rls-test-a', 'JCL'), ('user_bob', 'rls-test-b', 'Ryerson');
+insert into public.follows (user_id, station_id, tags)
+values ('user_alice', 'rls-test-a', '{JCL}'), ('user_bob', 'rls-test-b', '{Ryerson}');
 
 set local role authenticated;
 set local request.jwt.claims = '{"sub":"user_alice","role":"authenticated"}';
@@ -20,7 +20,7 @@ begin
   assert n = 1, format('alice should see 1 follow, saw %s', n);
 
   -- Alice can't change Bob's tag (RLS hides his row, so 0 rows match).
-  update public.follows set label = 'HACKED' where user_id = 'user_bob';
+  update public.follows set tags = '{HACKED}' where user_id = 'user_bob';
   get diagnostics n = row_count;
   assert n = 0, 'alice must not be able to edit bob''s tag';
 
@@ -30,16 +30,16 @@ begin
   assert n = 0, 'alice must not be able to delete bob''s follow';
 
   -- Alice can tag her own.
-  update public.follows set label = 'Volleyball' where station_id = 'rls-test-a';
+  update public.follows set tags = '{JCL,Volleyball}' where station_id = 'rls-test-a';
   get diagnostics n = row_count;
-  assert n = 1, 'alice should be able to tag her own follow';
+  assert n = 1, 'alice should be able to tag her own follow with two tags';
 
   -- A new follow is stamped with Alice's id from the token, not one she picks.
   insert into public.follows (station_id) values ('rls-test-b');
-  assert (select user_id from public.follows where station_id = 'rls-test-b' and label is null) = 'user_alice',
+  assert (select user_id from public.follows where station_id = 'rls-test-b' and tags = '{}') = 'user_alice',
     'user_id should come from the JWT';
 
-  -- Alice can't move a follow to someone else: only label is updatable.
+  -- Alice can't move a follow to someone else: only tags are updatable.
   begin
     update public.follows set user_id = 'user_bob' where station_id = 'rls-test-a';
     raise exception 'updating user_id should have been denied';
