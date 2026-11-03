@@ -54,13 +54,13 @@ export function StationRow(props: {
       {flash && <span key={flash.at} aria-hidden className="row-flash pointer-events-none absolute inset-0" />}
       <div className={`relative ${GRID} px-4 py-2.5`}>
         <div className="min-w-0">
+          <p className="truncate font-medium">{name}</p>
           {editing ? (
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 save();
               }}
-              className="flex items-center gap-2"
             >
               <label htmlFor={`tag-${stationId}`} className="sr-only">
                 Tag for {name}
@@ -75,46 +75,47 @@ export function StationRow(props: {
                 onKeyDown={(e) => {
                   if (e.key === "Escape") setEditing(false);
                 }}
-                placeholder="e.g. JCL, Ryerson, Volleyball"
-                className="w-full min-w-0 rounded-md border border-sky-400 px-2 py-0.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-200"
+                placeholder="Tag, e.g. JCL · Enter to save"
+                className="mt-0.5 w-full max-w-56 rounded border border-sky-400 px-1.5 py-0.5 text-xs focus:outline-none focus:ring-2 focus:ring-sky-200"
               />
             </form>
           ) : (
-            <p className="flex min-w-0 items-center gap-2">
+            <p className="truncate text-xs text-slate-500">
+              {/* My tag, as small text before the freshness; click it to edit. */}
               {label && (
-                <button
-                  type="button"
-                  onClick={startEditing}
-                  aria-label={`Tag: ${label}. Edit tag`}
-                  className="shrink-0 rounded bg-sky-100 px-1.5 py-0.5 text-xs font-semibold text-sky-900 hover:bg-sky-200 focus-visible:outline-2 focus-visible:outline-sky-600"
-                >
-                  {label}
-                </button>
+                <>
+                  <button
+                    type="button"
+                    onClick={startEditing}
+                    aria-label={`Tag: ${label}. Edit tag`}
+                    className="font-semibold text-sky-800 hover:underline focus-visible:outline-2 focus-visible:outline-sky-600"
+                  >
+                    {label}
+                  </button>
+                  {" · "}
+                </>
               )}
-              <span className="truncate font-medium">{name}</span>
+              {!status ? (
+                "No numbers yet"
+              ) : !status.in_service ? (
+                <span className="font-medium text-slate-700">Out of service</span>
+              ) : (
+                `changed ${formatAgo(secondsSince(status.changed_at, now))}`
+              )}
+              {!label && (
+                <>
+                  {" · "}
+                  <button
+                    type="button"
+                    onClick={startEditing}
+                    className="text-sky-700 hover:underline focus-visible:outline-2 focus-visible:outline-sky-600"
+                  >
+                    Add tag
+                  </button>
+                </>
+              )}
             </p>
           )}
-          <p className="truncate text-xs text-slate-500">
-            {!status ? (
-              "No numbers yet"
-            ) : !status.in_service ? (
-              <span className="font-medium text-slate-700">Out of service</span>
-            ) : (
-              `changed ${formatAgo(secondsSince(status.changed_at, now))}`
-            )}
-            {!editing && (
-              <>
-                {" · "}
-                <button
-                  type="button"
-                  onClick={startEditing}
-                  className="text-sky-700 hover:underline focus-visible:outline-2 focus-visible:outline-sky-600"
-                >
-                  {label ? "Edit tag" : "Add tag"}
-                </button>
-              </>
-            )}
-          </p>
         </div>
         <Count value={classic} delta={recent?.classic} dim={dim || !status?.in_service} label="classic bikes" />
         <Count value={status?.ebikes ?? null} delta={recent?.ebikes} dim={dim || !status?.in_service} label="e-bikes" />
